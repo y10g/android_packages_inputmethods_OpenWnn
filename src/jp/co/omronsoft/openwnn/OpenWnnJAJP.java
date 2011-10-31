@@ -1039,6 +1039,23 @@ public class OpenWnnJAJP extends OpenWnn {
             mHardAlt = 0;
             updateMetaKeyStateDisplay();
             return true;
+
+        } else if (key == KeyEvent.KEYCODE_SWITCH_CHARSET) {
+            /* change Japanese <-> English mode */
+			mHardAlt = 0;
+			mHardShift = 0;
+			updateMetaKeyStateDisplay();
+			if (mEngineState.isEnglish()) {
+				/* English mode to Japanese mode */
+				((DefaultSoftKeyboardJAJP) mInputViewManager).changeKeyMode(DefaultSoftKeyboard.KEYMODE_JA_FULL_HIRAGANA);
+    	        mConverter = mConverterJAJP;
+            } else {
+        	    /* Japanese mode to English mode */
+            	((DefaultSoftKeyboardJAJP) mInputViewManager).changeKeyMode(DefaultSoftKeyboard.KEYMODE_JA_HALF_ALPHABET);
+            	mConverter = mConverterEN;
+            }
+            mCandidatesViewManager.clearCandidates();
+            return true;
         }
 
         /* Functional key */
@@ -1128,7 +1145,7 @@ public class OpenWnnJAJP extends OpenWnn {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 return false;
-
+            
             default:
                 return true;
             }
